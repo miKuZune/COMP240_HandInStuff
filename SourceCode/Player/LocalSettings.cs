@@ -5,15 +5,12 @@ using UnityEngine;
 
 public class LocalSettings : MonoBehaviour 
 {
-
 	public bool addBots = false;
 	public bool botsCanStart = false;
 	
 	void Start()
 	{
-
 		DontDestroyOnLoad(gameObject);
-		
 	}
 
 }

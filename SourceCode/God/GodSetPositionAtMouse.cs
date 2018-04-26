@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GodSetPositionAtMouse : Photon.MonoBehaviour {
-
+    //Variables.
     public GameObject objToSpawn;
     Vector3 posToPlace;
     public GameObject tempButton;
 
     float yPosInc = 5;
-
+    //Have the object follow the players mouse position while they choose to place it.
     void FollowMouse()
     {
         RaycastHit hitInfo;
@@ -26,7 +26,7 @@ public class GodSetPositionAtMouse : Photon.MonoBehaviour {
         transform.position = posToPlace;
 
     }
-
+    //Check for when the player wants to place their object.
     void CheckIfDropped()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -35,14 +35,13 @@ public class GodSetPositionAtMouse : Photon.MonoBehaviour {
             Destroy(this.gameObject);
         }
     }
-    
+    //When the player drops their object.
     void OnDrop()
     {
         tempButton.GetComponentInParent<GodCooldown>().OnCooldown = true;
 
         Vector3 spawnPos = transform.position;
         spawnPos.y -= yPosInc;
-        //objToSpawn.AddComponent<DespawnObj>();
 		if (objToSpawn.name.Contains ("HealthPack")) 
 		{
 			spawnPos.y += 0.25f;
@@ -52,7 +51,6 @@ public class GodSetPositionAtMouse : Photon.MonoBehaviour {
 
     }
 
-    // Update is called once per frame
     void Update () {
         FollowMouse();
         CheckIfDropped();

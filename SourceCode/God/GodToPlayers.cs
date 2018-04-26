@@ -3,16 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GodToPlayers : MonoBehaviour {
-
-
     GameObject[] players = new GameObject[20];
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-
-
+    //Get all players in a scene.
     void GetPlayers()
     {
         GameObject[] temp = new GameObject[players.Length];
@@ -28,7 +20,7 @@ public class GodToPlayers : MonoBehaviour {
             }
         }
     }
-
+    //Choose the player to move toward and pass that into the god move script.
     public void GoToPlayer(int playerIndex)
     {
         GameObject god = GameObject.FindGameObjectWithTag("Player");

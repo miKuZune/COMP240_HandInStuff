@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Rounds : Photon.MonoBehaviour {
-
+    //Variables
 	public int roundLengthInSecs = 150;
 	public int numberOfRounds = 5;
 	List<PunTeams.Team> roundWinners = new List<PunTeams.Team>();
@@ -58,16 +58,7 @@ public class Rounds : Photon.MonoBehaviour {
 
 		if (photonView.isMine)
 		{
-			//playtestEndPanel = GameObject.Find ("Playtest-end-panel");
-			//playtestEndPanel.SetActive (false);
-			//string key = "Ascension_" + PhotonNetwork.gameVersion + "_isPlaytest";
-			//if (PlayerPrefs.HasKey (key)) {
-			//	if (PlayerPrefs.GetInt (key) == 1) {
-			//		// it IS a playtest
-			//		playTest = true;
-			//	}
-			//}
-
+            //Get references.
 			localSettings = GameObject.Find ("LocalSettings").GetComponent<LocalSettings>();
 			roundWinPanel = GameObject.Find("RoundWinTeamPanel");
 			roundWinPanel.SetActive(false);
@@ -123,6 +114,7 @@ public class Rounds : Photon.MonoBehaviour {
 		playerHealth = GetComponent<PlayerHealth>();
 	}
 
+    //Start the countdown for all player currently connected.
 	[PunRPC]
 	public void AllPlayersConnected()
 	{
@@ -135,10 +127,8 @@ public class Rounds : Photon.MonoBehaviour {
 		}
 	}
 
-	// Update is called once per frame
 	void Update ()
 	{
-
 		if (localSettings.botsCanStart == false) 
 		{
 
@@ -153,12 +143,6 @@ public class Rounds : Photon.MonoBehaviour {
 
 		if (!gameStarted && photonView.isMine) 
 		{
-
-
-
-
-
-
 			playerShoot.enabled = false;
 			movement.enabled = false;
 			cameraLook.enabled = false;
@@ -195,15 +179,7 @@ public class Rounds : Photon.MonoBehaviour {
 				{
 					if (timeLeft >= 0.05f)
 					{
-						//if (timeLeft > 1f)
-						//{
 						GetComponent<PhotonView>().RPC("SetTime", PhotonTargets.Others, timeLeft-0.012f);
-						//}else
-						//{
-						//  GetComponent<PhotonView>().RPC("SetTime", PhotonTargets.Others, timeLeft);
-
-						//}
-
 					}
 					sync = syncEverySecs;
 				}
@@ -211,17 +187,7 @@ public class Rounds : Photon.MonoBehaviour {
 				{
 					sync -= Time.deltaTime;
 				}
-
-				//if (timeLeft <= 0f)
-				//{
-				//    timeLeft = 0f;
-				//    GetComponent<PhotonView>().RPC("SetTime", PhotonTargets.Others, timeLeft);
-				//roundPaused = true;
-				//}
 			}
-
-
-
 		}
 		else if (photonView.isMine && !PhotonNetwork.isMasterClient)
 		{
@@ -238,6 +204,7 @@ public class Rounds : Photon.MonoBehaviour {
 		}
 		if (photonView.isMine)
 		{
+            //During the game
 			if (!roundPaused)
 			{
 				if (timeLeft > 11) {
@@ -371,7 +338,7 @@ public class Rounds : Photon.MonoBehaviour {
 
 					}else
 					{
-						// Reset everything tbh
+						// Reset everything
 						if(PhotonNetwork.player.GetTeam() == PunTeams.Team.red)
 						{
 							transform.position = gameManager.spawnPointRed.transform.position;
@@ -381,7 +348,6 @@ public class Rounds : Photon.MonoBehaviour {
 							transform.position = gameManager.spawnPointBlue.transform.position;
 						}
 
-						#region maxStuff
 						//Set up god
 						PhotonPlayer[] gods = TeamGodPick();
 						if(PhotonNetwork.player == gods[0] )
@@ -406,9 +372,6 @@ public class Rounds : Photon.MonoBehaviour {
 						{
 							player.GetComponent<PlayerMovement>().ResetSpeed();
 						}
-
-
-						#endregion
 
 						analytics.roundsPlayed++;
 
@@ -446,18 +409,12 @@ public class Rounds : Photon.MonoBehaviour {
 			{
 				timeLeft = time;
 				roundTimerText.text = Mathf.CeilToInt(timeLeft).ToString();
-				//Debug.Log("Received RPC for time: " + time);
 
-			}else
-			{
-				//Debug.Log("Received RPC for invalid time! " + time + " ignoring...");
 			}
-
 		}
 	}
 
 
-	#region max'sStuff
 	PhotonPlayer[] TeamGodPick()
 	{
 		PhotonPlayer[] redPlayers = new PhotonPlayer[5];
@@ -513,8 +470,6 @@ public class Rounds : Photon.MonoBehaviour {
 
 		return godPlayers;
 	}
-
-	#endregion
 
 	PunTeams.Team CalculateRoundWinners()
 	{

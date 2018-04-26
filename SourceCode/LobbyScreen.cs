@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class LobbyScreen : Photon.PunBehaviour
 {
-
+    //Variabels
     public GameObject team1playerListPanel;
     public GameObject team2playerListPanel;
 
@@ -14,7 +14,6 @@ public class LobbyScreen : Photon.PunBehaviour
     public GameObject startMatchButton;
 
     public GameObject chooseMapDropDown;
-    //public Text chosenMapText;
 
     public Text team1playerListText;
     public Text team2playerListText;
@@ -42,6 +41,7 @@ public class LobbyScreen : Photon.PunBehaviour
 
     void Start()
     {
+        //Get references
 		launcher = GameObject.Find ("Launcher").GetComponent<Launcher>();
         lobbyNameTxt.text = "Lobby: " + PhotonNetwork.room.Name;
         hiddenRoomToggle.gameObject.SetActive(false);
@@ -54,7 +54,6 @@ public class LobbyScreen : Photon.PunBehaviour
         if (!PhotonNetwork.isMasterClient)
         {
             playerLimitSlider.interactable = false;
-         //   hiddenRoomToggle.interactable = false;
 			botToggle.gameObject.SetActive(false);
 			playerLimitSlider.gameObject.SetActive(false);
 			playerLimitText.gameObject.SetActive(false);
@@ -68,15 +67,6 @@ public class LobbyScreen : Photon.PunBehaviour
 			MapDesc.gameObject.SetActive(false);
 			GameObject.Find ("MapThumbNail").SetActive (false);
         }
-
-
-
-
-
-        //if (PhotonNetwork.room.IsVisible)
-        //{
-//hiddenRoomToggle.isOn = false;
-        //}
 
         playerLimitSlider.value = PhotonNetwork.room.MaxPlayers;
         playerLimitText.text = "Player Limit " + "(" + PhotonNetwork.room.MaxPlayers + ")";
@@ -118,7 +108,6 @@ public class LobbyScreen : Photon.PunBehaviour
                     if (player.IsMasterClient)
                     {
                         label.GetComponent<Text>().text = "<color=#00ffffff>(Host)</color> " + player.NickName;
-                        //label.GetComponent<Text>().color = Color.cyan;
                     }
                     if (player.IsLocal)
                     {
@@ -223,7 +212,7 @@ public class LobbyScreen : Photon.PunBehaviour
         }
     }
 
-
+    //Display to other players which map is going to be played.
     [PunRPC]
 	public void UpdateMap(string newText, int value)
     {
@@ -235,7 +224,7 @@ public class LobbyScreen : Photon.PunBehaviour
         GameObject.Find("Launcher").GetComponent<Launcher>().levelToLoad = newText;
 
     }
-
+    
     public void JoinTeam(int team)
     {
         if (team == 1)
@@ -333,20 +322,6 @@ public class LobbyScreen : Photon.PunBehaviour
         UpdatePlayerList();
     }
 
-    public void UpdateToggles()
-    {
-      //  if (!PhotonNetwork.isMasterClient)
-       // {
-        //    if (PhotonNetwork.room.IsVisible == true)
-         //   {
-           //     hiddenRoomToggle.isOn = false;
-            //}
-            //else
-           // {
-            //    hiddenRoomToggle.isOn = true;
-           // }
-       // }
-    }
 
     public void ToggleBots()
     {
@@ -374,17 +349,11 @@ public class LobbyScreen : Photon.PunBehaviour
         playerLimitText.text = "Player Limit " + "(" + PhotonNetwork.room.MaxPlayers + ")";
     }
 
-    public void ToggleHidden()
-    {
-      //  PhotonNetwork.room.IsVisible = !PhotonNetwork.room.IsVisible;
-    }
 
     public void Reset()
     {
         startMatchButton.SetActive(false);
         playerLimitSlider.interactable = false;
         hiddenRoomToggle.interactable = false;
-        //playerLimitSlider.value = 16;
-        //playerLimitText.text = "Player Limit " + "(" + "16" + ")";
     }
 }

@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 public class GodMoveObj : Photon.MonoBehaviour {
-
+    //This script has been discontinued.
     public GameObject curr;
     public float objectMoveSpeed;
     Vector3 moveDir = Vector3.zero;
 
+    //Check if the player can currently move using keyboard commands.
     bool CheckCanMove()
     {
         bool moving;
         GameObject god = GameObject.Find("Player(Clone)");
         if (god.GetComponent<GodLookAandMove>().canMove || god.GetComponent<GodLookAandMove>().movingToPlayer)
         {
-            //Image movingIMG = GameObject.Find("MoveObj").GetComponent<Image>();
-            //movingIMG.color = Color.white;
             moving = true;
         }
         else
@@ -26,15 +25,13 @@ public class GodMoveObj : Photon.MonoBehaviour {
         }
         return moving;
     }
-
+    //To be run by all clients to tell them the object has moved.
     [PunRPC]
     public void MoveObject(float forwardMove, float rightMove)
     {
         moveDir = new Vector3(rightMove, 0, forwardMove);
-
-        //curr.transform.Translate(xMoveAmount, yMoveAmount, zMoveAmount);
     }
-
+    //Get the current object if it has a photonview on it.
     void GetCurrent()
     {
         curr = gameObject.GetComponent<GodSelectObject>().current;
@@ -46,7 +43,7 @@ public class GodMoveObj : Photon.MonoBehaviour {
             }
         }
     }
-
+    //Handle keyboard commands.
     void InputManager()
     {
         if (!CheckCanMove())
@@ -75,7 +72,7 @@ public class GodMoveObj : Photon.MonoBehaviour {
             moveDir = new Vector3(0,0,0);
         }
     }
-	// Update is called once per frame
+
 	void Update () {
         if (!GetComponent<GodSetup>().isGod)
         {

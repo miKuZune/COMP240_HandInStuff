@@ -5,8 +5,6 @@ using UnityEngine;
 public class HealthPack : MonoBehaviour {
 
     public int healAmount;
-    // Use this for initialization
-
     Transform parent;
 
     PlayerHealth h;
@@ -17,11 +15,9 @@ public class HealthPack : MonoBehaviour {
     }
 
     [PunRPC]
-    public void DoStuff()
+    public void Destroy()
     {
         if(parent != null)
-
-
         {
             parent.GetComponent<RespawnPickup>().spawned = false;
             parent.GetComponent<RespawnPickup>().respawnTimer = parent.GetComponent<RespawnPickup>().timeToRespawn;
@@ -38,15 +34,11 @@ public class HealthPack : MonoBehaviour {
         {
             if (other.gameObject.GetComponent<PlayerHealth>().currHealth < other.gameObject.GetComponent<PlayerHealth>().maxHealth)
             {
-                
-
-                //other.GetComponent<PlayerHealth>().AddHealth(healAmount);
                 h = other.GetComponent<PlayerHealth>();
 
                 h.GetComponent<PhotonView>().RPC("AddHealth", PhotonTargets.All, healAmount);
 
-                this.GetComponent<PhotonView>().RPC("DoStuff", PhotonTargets.All);
-
+                this.GetComponent<PhotonView>().RPC("Destroy", PhotonTargets.All);
             }
         }
     }

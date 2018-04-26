@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Launcher : Photon.PunBehaviour 
 {
-
+    //Variables
 	public string gameVersion = "1";
 	public PhotonLogLevel logLevel = PhotonLogLevel.Informational;
 	public byte maxPlayers = 8;
@@ -349,6 +349,7 @@ public class Launcher : Photon.PunBehaviour
 
     #endregion
 
+    //Display all rooms that are currently in play.
     void ShowRooms()
     {
         foreach(Transform child in roomsPanel.transform)
@@ -356,12 +357,9 @@ public class Launcher : Photon.PunBehaviour
             Destroy(child.gameObject);
         }
 
-        //string roomListString = "";
         RoomInfo[] roomList = PhotonNetwork.GetRoomList();
         foreach (RoomInfo room in roomList)
         {
-            //Debug.Log("Room: " + room.Name);
-            //roomListString = roomListString + "\n" + room.Name;
             GameObject button = Instantiate(joinButtonPrefab, roomsPanel.transform) as GameObject;
             if (room.IsOpen)
             {
@@ -372,7 +370,6 @@ public class Launcher : Photon.PunBehaviour
             }
         }
         availableRooms.text = "Existing Lobbies (" + roomList.Length + "):";
-        //progressLabelText.text = roomListString;
         playersOnline.text = "Players Online: " + PhotonNetwork.countOfPlayers;
     }
 }

@@ -29,18 +29,6 @@ public class DisableThirdPersonStuff : Photon.MonoBehaviour {
 				}
 			}
 
-			//transform.Find ("Shotgun_Placeholder:pCube3").GetComponent<MeshRenderer> ().enabled = false;
-			//transform.Find ("Shotgun_Placeholder:Pump1").GetComponent<MeshRenderer> ().enabled = false;
-
-			//transform.Find ("Shotgun_Placeholder:pCube2").GetComponent<MeshRenderer> ().enabled = false;
-			//transform.Find ("Shotgun_Placeholder:Shotgun").GetComponent<MeshRenderer> ().enabled = false;
-			//transform.Find ("Shotgun_Placeholder:Shotgun1").GetComponent<MeshRenderer> ().enabled = false;
-			//transform.Find ("Shotgun_Placeholder:Shotgun2").GetComponent<MeshRenderer> ().enabled = false;
 		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 	}
 }

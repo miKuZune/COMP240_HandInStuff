@@ -4,20 +4,22 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class GodDoors : Photon.MonoBehaviour {
+    //This script is discontinued.
 
+    //Variables
     public GameObject door;
     public bool hasLocked;
     private float lockTimer;
     public float lockCooldown;
     public Image lockButton;
 
-	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
         hasLocked = false;
         lockCooldown = 5.0f;
-        
-	}
+  	}
 
+    //Store the gameobject if there is a PhotonView on it.
     void GetCurrent()
     {
         door = gameObject.GetComponent<GodSelectObject>().current;
@@ -30,7 +32,7 @@ public class GodDoors : Photon.MonoBehaviour {
         }
     }
 
-
+    //Swap the door to be locked/unlocked.
     public void changeLockState()
     {
         if (hasLocked)
@@ -42,20 +44,19 @@ public class GodDoors : Photon.MonoBehaviour {
 
         if (doorLocked)
         {
-            Debug.Log("DoorLocked");
             GameObject.Find("Door(Clone)").GetComponent<PhotonView>().RPC("UnlockDoor", PhotonTargets.All);
         }
         else
         {
-            Debug.Log("Door not locked");
             GameObject.Find("Door(Clone)").GetComponent<PhotonView>().RPC("LockDoor", PhotonTargets.All);
         }
+        //Setup cooldown
         GameObject.Find("Player(Clone)").GetComponent<GodDoors>().hasLocked = true;
         GameObject.Find("Player(Clone)").GetComponent<GodDoors>().lockTimer = GameObject.Find("Player(Clone)").GetComponent<GodDoors>().lockCooldown;
         lockButton = GameObject.Find("LockDoor").GetComponent<Image>();
         lockButton.color = Color.red;
     }
-
+    
     public void OpenDoor()
     {
         bool doorLocked = GameObject.Find("Door(Clone)").GetComponent<DoorHandlin>().locked;
@@ -66,6 +67,7 @@ public class GodDoors : Photon.MonoBehaviour {
             GameObject.Find("Door(Clone)").GetComponent<PhotonView>().RPC("OpenDoor", PhotonTargets.All);
         }
     }
+
     public void CloseDoor()
     {
         bool doorLocked = GameObject.Find("Door(Clone)").GetComponent<DoorHandlin>().locked;
@@ -76,6 +78,7 @@ public class GodDoors : Photon.MonoBehaviour {
             GameObject.Find("Door(Clone)").GetComponent<PhotonView>().RPC("CloseDoor", PhotonTargets.All);
         }
     }
+
     void Update()
     {
         GetCurrent();

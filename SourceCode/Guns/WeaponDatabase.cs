@@ -5,12 +5,13 @@ using LitJson;
 using System.IO;
 
 public class WeaponDatabase : MonoBehaviour {
-	
+	//Variables.
 	public List<Item> database = new List<Item>();
 	private JsonData itemData;
 
 	void Start ()
 	{
+        //Read guns data from the file.
 		itemData = JsonMapper.ToObject (File.ReadAllText(Application.dataPath + "/StreamingAssets/items.json"));
 
 		ConstructItemDatabase();

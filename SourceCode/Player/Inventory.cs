@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Inventory : Photon.MonoBehaviour {
-
+    //Variables
     PlayerShoot playerShoot;
     public List<Item> guns = new List<Item>();
     public Item equippedWeapon;
@@ -39,7 +39,7 @@ public class Inventory : Photon.MonoBehaviour {
 
         if (!playerShoot.reloading && photonView.isMine)
         {
-            // do scrolly wheel menu thing
+            // Scroll through the different weapons and give them to the player.
             float f = Input.GetAxis("Mouse ScrollWheel");
             if (f < 0)
             {
@@ -56,7 +56,6 @@ public class Inventory : Photon.MonoBehaviour {
 				foreach (Item item in guns) 
 				{
 					Transform relevantImage = weaponWheel.transform.Find ("weapon0" + i);
-					//Debug.Log ("weapon0" + i + "_image");
 					relevantImage.gameObject.GetComponent<Image> ().sprite = item.Sprite;
 					i++;
 				}
@@ -75,19 +74,11 @@ public class Inventory : Photon.MonoBehaviour {
 				int i = 1;
 				foreach (Item item in guns) 
 				{
-                    //+ "_image"
                     Transform relevantImage = weaponWheel.transform.Find ("weapon0" + i );
-					//Debug.Log ("weapon0" + i + "_image");
 					relevantImage.gameObject.GetComponent<Image> ().sprite = item.Sprite;
 					i++;
 				}
             }
-            //GetComponent<PhotonView>().RPC("SetAnimTrigger", PhotonTargets.All);    // set the third person animator trigger 'switching'
-
-            /*if (Input.GetKeyDown(KeyCode.Q))
-            {
-                DropWeapon();
-            }*/
         }
         
 		if (photonView.isMine) {
@@ -103,7 +94,6 @@ public class Inventory : Photon.MonoBehaviour {
 		}
         
     }
-
 
     public void AddWeapon(Item weaponToAdd)
     {
@@ -138,11 +128,6 @@ public class Inventory : Photon.MonoBehaviour {
 
             Vector3 dropPos = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z + 2);
             GameObject drop = PhotonNetwork.Instantiate("Models/items/" + equippedWeapon.Slug + "_drop", dropPos, Quaternion.identity, 0) as GameObject;
-            //drop.AddComponent<Rigidbody>();
-            //drop.AddComponent<BoxCollider>();
-            //drop.GetComponent<BoxCollider>().isTrigger = true;
-            //drop.GetComponent<BoxCollider>().size = new Vector3(1.1f,1.1f,1.1f);
-            //drop.AddComponent<BoxCollider>();
             drop.AddComponent<Gun>();
             drop.GetComponent<Gun>().thisGun = equippedWeapon;
             drop.GetComponent<Gun>().thisGun.CurrentAmmo = equippedWeapon.CurrentAmmo;

@@ -22,20 +22,7 @@ public class Projectile : Photon.PunBehaviour {
         }
     }
 
- /*   void OnCollisionEnter(Collision wank)
-    {
-        if (wank.collider.gameObject.CompareTag("Player"))
-        {
-            if(wank.collider.gameObject.GetComponent<PhotonView>().owner.GetTeam() == owner.GetTeam())
-            {
-                wank.collider.gameObject.GetComponent<PlayerHealth>().lastToDamageMe = owner;
-                wank.collider.gameObject.GetComponent<PhotonView>().RPC("TakeDamage", PhotonTargets.All, damage);
-                PhotonNetwork.Destroy(gameObject);
-
-            }
-        }
-    }
-    */
+    //Set the projectiles info to be sent across network.
     [PunRPC]
 	public void SetInfo(PhotonPlayer Owner, int Damage, Vector3 force1, Vector3 force2, bool team, int playerID)
     {

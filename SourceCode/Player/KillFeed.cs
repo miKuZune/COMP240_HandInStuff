@@ -14,6 +14,7 @@ public class KillFeed : Photon.MonoBehaviour {
             killFeedPanel = GameObject.Find("KillFeedPanel");
     }
 
+    //Tell all clients to display who has been killed and who by.
     [PunRPC]
     public void AddToKillFeed(PhotonPlayer killer, PhotonPlayer victim)
     {

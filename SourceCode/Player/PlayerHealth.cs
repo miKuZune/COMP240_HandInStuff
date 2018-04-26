@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerHealth : Photon.MonoBehaviour {
-
+    //Variables
     public float maxHealth = 100f;
     public float currHealth;
 
@@ -22,9 +22,7 @@ public class PlayerHealth : Photon.MonoBehaviour {
 
     public PhotonPlayer lastToDamageMe;
 
-
-	// Use this for initialization
-	void Start ()
+    void Start ()
     {
         currHealth = maxHealth;
 		respawn = GetComponent<Respawn> ();
@@ -40,6 +38,7 @@ public class PlayerHealth : Photon.MonoBehaviour {
 		}
 	}
 	
+    //Tell all clients that a player has taken damage.
     [PunRPC]
 	public void TakeDamage(float damage)
     {
@@ -61,6 +60,7 @@ public class PlayerHealth : Photon.MonoBehaviour {
 		bulletHitFleshSFX.Play ();
     }
 
+    //Tell all clients that a player has gained health.
     [PunRPC]
     public void AddHealth(int amount)
     {
@@ -81,7 +81,6 @@ public class PlayerHealth : Photon.MonoBehaviour {
         {
             if (fadePain && fadeTimer > 0f)
             {
-                //Debug.Log("in");
                 a -= Time.deltaTime * 4;
 
                 damageFx.GetComponent<Image>().color = new Color(1, 1, 1, a);
@@ -89,7 +88,6 @@ public class PlayerHealth : Photon.MonoBehaviour {
             }
             if (fadeTimer <= 0f)
             {
-                //Debug.Log("out");
                 fadePain = false;
                 damageFx.GetComponent<Image>().color = new Color(1, 1, 1, 0);
                 fadeTimer = 0.3f;
@@ -97,7 +95,7 @@ public class PlayerHealth : Photon.MonoBehaviour {
             }
         }
     }
-
+    //For each client, store the last person to damage a player.
     [PunRPC]
     public void SetLastToDamage(PhotonPlayer player)
     {
@@ -114,7 +112,6 @@ public class PlayerHealth : Photon.MonoBehaviour {
             {
                 GetComponent<PhotonView>().RPC("AddKill", PhotonTargets.All, lastToDamageMe);
                 GetComponent<PhotonView>().RPC("AddToKillFeed", PhotonTargets.All, lastToDamageMe, PhotonNetwork.player);
-                // maybe show the number of kills somewhere to debug?
                 GetComponent<PhotonView>().RPC("AddKillToStreak", PhotonTargets.All, lastToDamageMe);
             }
 
@@ -142,6 +139,7 @@ public class PlayerHealth : Photon.MonoBehaviour {
 		hpSlider.value = currHealth;
 	}
 
+    //Handle when a projectile hits a person.
     void OnTriggerEnter(Collider other)
     {
         if(photonView.isMine)
@@ -155,20 +153,12 @@ public class PlayerHealth : Photon.MonoBehaviour {
                 }
                 lastToDamageMe = other.gameObject.GetComponent<Projectile>().owner;
 				GetComponent<PhotonView> ().RPC ("HitMarkerActivate", PhotonTargets.All, other.GetComponent<Projectile> ().bulletPlayerID);
-				//Debug.Log (other.gameObject.GetComponent<Projectile> ().bulletPlayerID);
                 GetComponent<PhotonView>().RPC("TakeDamage", PhotonTargets.All, (float)other.gameObject.GetComponent<Projectile>().damage);
                 other.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.player);
-                //GetComponent<PhotonView>().RPC("DeleteBullet", lastToDamageMe, other.gameObject);
                 PhotonNetwork.Destroy(other.gameObject);
                 Debug.Log("ouch");
 
             }
         }
     }
-
- //   [PunRPC]
-  //  public void DeleteBullet(GameObject bullet)
-   // {
-    //    PhotonNetwork.Destroy(bullet);
-   // }
 }

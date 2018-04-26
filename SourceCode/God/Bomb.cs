@@ -5,11 +5,14 @@ using UnityEngine.UI;
 
 public class Bomb : Photon.MonoBehaviour {
 
+    //Variables for chaning how the bomb acts
     public float distToHit;
     public float damage;
     public float timeToExplode;
     public float dropAmount;
     float dropHeight;
+
+    //Variables used for making the bomb work.
     public bool canExplode;
 
 	bool timerOver = false;
@@ -25,18 +28,20 @@ public class Bomb : Photon.MonoBehaviour {
 
     float timer;
 
+    //Store the player's network details.
     public void SetOwner(PhotonPlayer newOwner)
     {
         this.owner = newOwner;
     }
 
-	// Use this for initialization
 	void Start () {
+        //Set the timer so that it can count to when the bomb should explode.
         timer = timeToExplode;
 
-        //GetComponentInParent<DespawnObj>().timer = timer;
+        //Checks if the bomb can explode. This is used to stop the bomb exploding when havoc players are choosing where to place the bomb.
         if (canExplode)
         {
+            //Math to drop the bomb from a certain height and detonate when it hits the ground.
             dropHeight = timeToExplode * dropAmount;
             Vector3 newPos = transform.position;
             newPos.y += dropHeight;
@@ -49,12 +54,13 @@ public class Bomb : Photon.MonoBehaviour {
 		bombAudioSrc.Play ();
     }
 	
-	// Update is called once per frame
 	void Update () {
+        //Stop this method from running if the god is choosing where to place the bomb.
         if (!canExplode)
         {
             return;
         }
+        //Move the bomb downwards and count down until the bomb should deal damage. 
         timer -= Time.deltaTime;
 		if(timer <= 0 && !timerOver)
         {
@@ -65,6 +71,7 @@ public class Bomb : Photon.MonoBehaviour {
         newPos.y -= (dropHeight / timeToExplode) * Time.deltaTime;
         transform.position = newPos;
 
+        //Destroy the object once the bomb has exploded.
 		if (destroyme) {
 			destroyTimer -= Time.deltaTime;
 			if (destroyTimer <= 0f) {
@@ -75,12 +82,13 @@ public class Bomb : Photon.MonoBehaviour {
 		}
 	}
 
+    //Find the player's within hit distance of the bomb and deal damage to them.
     void OnExplode()
     {
 		// play explode
 		bombAudioSrc.clip = bombexplode;
 		bombAudioSrc.Play ();
-
+        //Only run this code on the master client.
         if (!PhotonNetwork.isMasterClient)
         {
             return;

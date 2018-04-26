@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerShoot : Photon.MonoBehaviour {
-
+    //Variables
 	public float fireRate = 0.5f;
 	float cooldown = 0f;
 	public float damage = 25f;
@@ -146,7 +146,6 @@ public class PlayerShoot : Photon.MonoBehaviour {
 			myGun.GetComponentInChildren<MeshRenderer> ().enabled = false;
 			reloadWarningPanel = GameObject.Find("ReloadWarningPanel");
             gunAnimator = Camera.main.transform.Find("WaterPistol_Idle").GetComponent<Animator>();
-			//gunAnimator = Camera.main.GetComponentInChildren<Animator>();
 			ammo = magSize;
 			ammoTxt = GameObject.Find("AmmoText").GetComponent<Text>();
 			ammoTxt.text = ammo.ToString();
@@ -160,14 +159,10 @@ public class PlayerShoot : Photon.MonoBehaviour {
 			hitMarker.GetComponent<Image> ().enabled = false;
 		}
 
-
-
 		myGun.transform.localScale = Vector3.one;
 		StartCoroutine("FuckWaitAss");
-
-
 	}
-
+    //Check if the weapon has been alreaedy chosen / is invalid for any other reason.
     bool WeaponIDValid(int ID, int[] IDs)
     {
         bool isValid = true;
@@ -188,7 +183,7 @@ public class PlayerShoot : Photon.MonoBehaviour {
             isValid = false;
         }
 
-        //Ignore some guns (Idk which ones and i'm too lazy to look them up)
+        //Ignore guns which are not fully implemented.
 		if(ID == 0)
         {
             isValid = false;
@@ -197,7 +192,7 @@ public class PlayerShoot : Photon.MonoBehaviour {
         return isValid;
     }
 
-
+    //Choses 4 random weapons for the player to use.
     void GetRandomWeapons()
     {
         int[] IDs = { 999, 999, 999, 999 };
@@ -220,38 +215,22 @@ public class PlayerShoot : Photon.MonoBehaviour {
         }
     }
 
-    //Choose random fuckass weapon
-	IEnumerator FuckWaitAss(){
+    //Choose random weapon
+	IEnumerator WaitForWeaponChoose(){
 		yield return new WaitForSeconds (0.2f);
-
-        // 0, 1, 3, 4, 5,
-        /*for(int i = 0; i < 4; i++)
-		{
-			int number = Mathf.RoundToInt (Random.Range (0, 5));
-			while (number == 2 || number == 0) 
-			{
-                //Random number
-				number = Mathf.RoundToInt (Random.Range (0, 5));
-			}
-			inventory.guns.Add (weaponDatabase.FetchItemByID (number));
-		}*/
         GetRandomWeapons();
 
         SetWeaponFirstPerson(inventory.guns[0].ID);
         inventory.equippedWeapon = (inventory.guns[0]);
 		yield return null;
 	}
-
+    //Handlewhen the player swaps weapon.
 	public void SetWeaponFirstPerson(int weaponID)
 	{
 		if (photonView.isMine) {
 			if (reloadWarningPanel != null) {
 				reloadWarningPanel.SetActive (false);
 			}
-
-
-
-
 			// switch anims
 			int layer = currentWeapon.ID;
 			gunAnimator.SetLayerWeight (layer, 0);
@@ -327,9 +306,8 @@ public class PlayerShoot : Photon.MonoBehaviour {
 					actualGun.GetComponentInChildren<Renderer>().material = canRed;
 					zippo.GetComponent<Renderer>().material = zippoRed;
 				}
-
-				//17.126, 88.453, - 88.47
 			}
+            //Hard-coded all weapons to be in the right positions in 1st person.
 			if (currentWeapon.Slug == "flaregun") {
 				actualGun.transform.localPosition = new Vector3 (0.217f, 0.073f, -0.327f);
 				actualGun.transform.localRotation = Quaternion.Euler (-0.381f, 151.7f, 180f);
@@ -464,7 +442,7 @@ public class PlayerShoot : Photon.MonoBehaviour {
 
 			GameObject myNewGun = Instantiate (Resources.Load<GameObject> ("Models/items/" + currentWeapon.Slug), myGun.transform) as GameObject;
 			Debug.Log (myNewGun.name);
-
+            //Hard-coded all weapons to be in the correct position in 3rd person.
 			if (currentWeapon.Slug == "flamer") {
 				myNewGun.transform.localPosition = new Vector3 (4.722f, -7.735f, 2.231f);
 				myNewGun.transform.localRotation = Quaternion.Euler (new Vector3 (0f, -83.3f, 0f));

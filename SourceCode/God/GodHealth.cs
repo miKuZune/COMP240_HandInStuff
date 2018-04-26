@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class GodHealth : Photon.MonoBehaviour {
-
+    //Used to spawn health packs that players on the ground can pick up.
+    
+    //Variables
     public GameObject healthPack;
     public Vector3 spawnPos;
 
@@ -16,7 +18,7 @@ public class GodHealth : Photon.MonoBehaviour {
     public float spawnTimer;
     public float spawnCooldown;
 
-
+    //Performed when a health pack is spawned.
     public void OnSpawn()
     {
         bool spawned = GameObject.Find("Player(Clone)").GetComponent<GodHealth>().hasSpawned;
@@ -30,6 +32,7 @@ public class GodHealth : Photon.MonoBehaviour {
         UIimage.color = Color.red;
     }
 
+    //Handle cooldown
     public void SpawnCooldown()
     {
         GameObject.Find("Player(Clone)").GetComponent<GodHealth>().spawnTimer -= Time.deltaTime;
@@ -40,6 +43,9 @@ public class GodHealth : Photon.MonoBehaviour {
             UIimage.color = Color.white;
         }
     }
+    
+    
+    //To be sent to each client to spawn a health pack.
 	[PunRPC]
     public void Spawn()
     {
@@ -63,6 +69,8 @@ public class GodHealth : Photon.MonoBehaviour {
         current = PhotonNetwork.Instantiate(healthPack.name, newSpawnPos, Quaternion.identity, 0);
                 
     }
+
+    //These methods are sent to each client to tell them that the health pack has moved in a direction.
 
     [PunRPC]
     public void Forward()
@@ -104,6 +112,7 @@ public class GodHealth : Photon.MonoBehaviour {
         current.transform.position = newPos;
         StopShowMoveGUI();
     }
+
     public void ShowMoveGUI()
     {
         spawnMove.gameObject.SetActive(true);
@@ -113,14 +122,13 @@ public class GodHealth : Photon.MonoBehaviour {
         spawnMove.gameObject.SetActive(false);
     }
 
-
+    //Destroys accross the network.
     public void Despawn()
     {
-        //Needs some way of choosing which health pack to destroy.
-        if(current != null)
-            PhotonNetwork.Destroy(current);
+        if (current != null) { PhotonNetwork.Destroy(current); }
     }
 
+    //Send a message to all the clients that the healthpack has moved.
     [PunRPC]
     public void Move()
     {
@@ -130,7 +138,7 @@ public class GodHealth : Photon.MonoBehaviour {
 
         current.transform.position = newPos;
     }
-
+    //Get the Vector3 position of where the users mouse is pointing.
     void SpawnPosByPosRaycast()
     {
         RaycastHit hitInfo;
@@ -140,8 +148,8 @@ public class GodHealth : Photon.MonoBehaviour {
             spawnPos = hitInfo.point;
         }
     }
-	// Update is called once per frame
-	void Update () {
+
+    void Update () {
         if (hasSpawned)
         {
             SpawnCooldown();

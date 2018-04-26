@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GodChangeLevel : MonoBehaviour {
-
+    //Variables to define the layers of the map.
     public GameObject[] layers;
 	GameObject player;
 	int current;
@@ -11,21 +11,23 @@ public class GodChangeLevel : MonoBehaviour {
 	float startCooldownTimer;
 	float roundTimer;
 	float roundCooldownTimer;
-	// Use this for initialization
-	void Start () {
+
+	void Start ()
+    {
 		current = 0;
 		player = GameObject.FindGameObjectWithTag("Player");
 		GetTimers();
 	}
-
-	void RoundReset(){
+    //Set all the layers of the map to be visible again.
+	void RoundReset()
+    {
 		foreach (GameObject layer in layers) {
 			layer.SetActive (true);
 		}
 		current = 0;
 
 	}
-		
+	//Get round timers.
 	void GetTimers()
 	{
 		player = GameObject.FindGameObjectWithTag ("Player");
@@ -33,8 +35,7 @@ public class GodChangeLevel : MonoBehaviour {
 		roundTimer = player.GetComponent<Rounds>().roundLengthInSecs;
 		roundCooldownTimer = player.GetComponent<Rounds>().roundFinishCooldown;
 	}
-
-
+    //Show the level above the current one.
     public void OnUpLevel()
     {
         Debug.Log(current);
@@ -50,7 +51,7 @@ public class GodChangeLevel : MonoBehaviour {
 
         current--;
     }
-
+    //Show the level beneath the current one.
     public void OnDownLevel()
     {
         Debug.Log(current);
@@ -65,19 +66,21 @@ public class GodChangeLevel : MonoBehaviour {
         current++;
     }
 
-	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
+        //Count down the initial start time for the game to start.
 		if (startCooldownTimer > 0) {
 			startCooldownTimer -= Time.deltaTime;
-		} else if (roundTimer > 0) {
+		} else if (roundTimer > 0) { //Then count down the round time.
 			roundTimer -= Time.deltaTime;
-		} else {
+		} else {//After the round is over reset.
 			RoundReset ();
 			roundCooldownTimer -= Time.deltaTime;
 			if (roundCooldownTimer < 0) {
 				GetTimers ();
 			}
 		}
+        //Gives gods the ability to swap between layers using keybindings.
 		if (player.GetComponent<GodSetup> ().isGod) {
 			if (Input.GetKeyDown (KeyCode.Q)) {
 				OnDownLevel ();

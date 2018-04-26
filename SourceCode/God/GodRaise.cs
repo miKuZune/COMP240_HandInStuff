@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GodRaise : Photon.MonoBehaviour {
-
+    //Script has been discontinued
     private GameObject pillar;
     private float timer;
     private bool isSpawned;

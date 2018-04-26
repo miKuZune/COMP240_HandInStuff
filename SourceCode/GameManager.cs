@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class GameManager : Photon.PunBehaviour
 {
-
+    //Variables
 	public GameObject playerPrefab;
 	public GameObject botPrefab;
 
@@ -32,7 +32,7 @@ public class GameManager : Photon.PunBehaviour
 
 	private void Start()
 	{
-
+        //Get references.
 		localSettings = GameObject.Find("LocalSettings").GetComponent<LocalSettings>();
 
 		foreach(PhotonPlayer player in PhotonNetwork.playerList)
@@ -68,11 +68,7 @@ public class GameManager : Photon.PunBehaviour
 
 			analytics = GameObject.FindGameObjectWithTag("Analytics").GetComponent<SendAnalyticInfo>();
 		}
-		else
-		{
-			//nothing
-		}
-
+        //Handle adding bots into the game.
 		if (PhotonNetwork.isMasterClient && localSettings.addBots == true)
 		{
 
@@ -81,31 +77,20 @@ public class GameManager : Photon.PunBehaviour
 				Debug.Log("adding red bot");
 				// spawn bot
 				GameObject bot = PhotonNetwork.Instantiate(botPrefab.name, new Vector3(0, 1000,0), Quaternion.identity, 0) as GameObject;
-				//bot.GetComponent<NavMeshAgent> ().enabled = false;
 
-				//GameObject bot = PhotonNetwork.Instantiate(botPrefab.name, spawnPointRed.transform.position, Quaternion.identity, 0) as GameObject;
 				Text botNameText = (Text)bot.GetComponentInChildren(typeof(Text));
 				BOT_Profile bOT_Profile = (BOT_Profile)bot.GetComponent(typeof(BOT_Profile));
 				botNameText.color = Color.red;
 				bOT_Profile.GetAndSetBotName();
 				botNameText.text = "[BOT]" + bOT_Profile.botName;
 
-				// botScript.team = red
 				bot.GetComponent<BOT_Profile>().red = true;
-				//bot.GetComponent<NavMeshAgent> ().enabled = false;
 
 				if (bot.GetComponent<BOT_Profile>().red && !bot.GetComponent<NavMeshAgent>().isOnNavMesh) 
 				{
-					//bot.GetComponent<NavMeshAgent> ().enabled = true;
 					bot.GetComponent<NavMeshAgent>().Warp(spawnPointRed.transform.position);
-					//bot.transform.position = spawnPointRed.transform.position;
-					//bot.GetComponent<NavMeshAgent> ().enabled = false;
-					//bot.GetComponent<NavMeshAgent> ().enabled = true;
 				} else {
-					//bot.GetComponent<NavMeshAgent> ().enabled = true;
 					bot.GetComponent<NavMeshAgent>().Warp(spawnPointBlue.transform.position);
-					//bot.GetComponent<NavMeshAgent> ().enabled = false;
-					//bot.GetComponent<NavMeshAgent> ().enabled = true;
 				}
 
 
@@ -118,7 +103,6 @@ public class GameManager : Photon.PunBehaviour
 			{
 				Debug.Log("adding blue bot");
 				// spawn bot
-				//GameObject bot = PhotonNetwork.Instantiate(botPrefab.name, spawnPointBlue.transform.position, Quaternion.identity, 0) as GameObject;
 				GameObject bot = PhotonNetwork.Instantiate(botPrefab.name, new Vector3(0, 1000,0), Quaternion.identity, 0) as GameObject;
 
 				//
@@ -129,22 +113,13 @@ public class GameManager : Photon.PunBehaviour
 				bOT_Profile.GetAndSetBotName();
 				botNameText.text = "[BOT]" + bOT_Profile.botName;
 
-				// botScript.team = red
-				bot.GetComponent<BOT_Profile>().blue = true;
-
-				//bot.GetComponent<NavMeshAgent> ().enabled = false;
+                bot.GetComponent<BOT_Profile>().blue = true;
 
 				if (bot.GetComponent<BOT_Profile>().red && !bot.GetComponent<NavMeshAgent>().isOnNavMesh) 
 				{
-					//bot.GetComponent<NavMeshAgent> ().enabled = true;
 					bot.GetComponent<NavMeshAgent>().Warp(spawnPointRed.transform.position);
-					//bot.GetComponent<NavMeshAgent> ().enabled = false;
-					//bot.GetComponent<NavMeshAgent> ().enabled = true;
 				} else {
-					//bot.GetComponent<NavMeshAgent> ().enabled = true;
 					bot.GetComponent<NavMeshAgent>().Warp(spawnPointBlue.transform.position);
-					//bot.GetComponent<NavMeshAgent> ().enabled = false;
-					//bot.GetComponent<NavMeshAgent> ().enabled = true;
 				}
 				teamBlueCount++;
 			}
@@ -169,10 +144,6 @@ public class GameManager : Photon.PunBehaviour
 		{
 			Debug.LogError("Not master client!");
 		}
-		//  Debug.Log("Loading level: " + PhotonNetwork.room.PlayerCount);
-		//  PhotonNetwork.LoadLevel("Room for " + PhotonNetwork.room.PlayerCount);
-
-
 	}
 
 	#region callbacks
@@ -194,8 +165,6 @@ public class GameManager : Photon.PunBehaviour
 
 	void PrepareBots()
 	{
-
-
 
 	}
 }

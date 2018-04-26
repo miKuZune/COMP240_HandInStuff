@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 public class SlowField : Photon.MonoBehaviour {
-
+    //Currently not in game.
     public float distToHit;
     public float speedWhileSlowed;
 
@@ -25,19 +25,19 @@ public class SlowField : Photon.MonoBehaviour {
         }
     }
 
-	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
         timer = timeToDespawn;
         UI = GameObject.FindGameObjectWithTag("StunnedUI").GetComponent<Text>();
     }
-	// Update is called once per frame
-	void Update () {
 
-
+    void Update ()
+    {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
         if (player.GetComponent<PhotonView>().isMine)
         {
+            //If the player is in range, slow their movespeed.
             float dist = Vector3.Distance(transform.position, player.transform.position);
 
             if (dist <= distToHit)

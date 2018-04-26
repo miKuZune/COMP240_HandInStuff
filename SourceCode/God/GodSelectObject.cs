@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GodSelectObject : Photon.MonoBehaviour {
-
+    //Script has been discontinued.
     public GameObject current;
     public Camera cam;
     public Vector3 GetPosition;
@@ -16,7 +16,7 @@ public class GodSelectObject : Photon.MonoBehaviour {
             cam = Camera.main;
         }
     }
-
+    //Select an object where the mouse currently is.
     void GetNewObject()
     {
         RaycastHit hitInfo;
@@ -51,7 +51,6 @@ public class GodSelectObject : Photon.MonoBehaviour {
         }
     }
 
-	// Update is called once per frame
 	void Update () {
         if (!GetComponent<GodSetup>().isGod)
         {

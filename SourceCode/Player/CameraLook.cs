@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class CameraLook : Photon.MonoBehaviour
 {
+    //Variables.
 	public Transform myCam;
-
-	//public Transform aimBall;
     Quaternion originalRot;
 
     public float baseSensitivity;
@@ -39,41 +38,25 @@ public class CameraLook : Photon.MonoBehaviour
             originalRot = myCam.transform.localRotation;
 		}
 	}
-
+    //Load the sensitivity from storage.
     void GetSensitivity()
     {
         baseSensitivity = PlayerPrefs.GetFloat("Sensitivity") * 3;
     }
-
+    //Handle player looking with mouse.
 	void playerLook()
 	{
 		transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X"), 0) * baseSensitivity * Time.deltaTime);
 
-		//limit Y rot
 		xRot = Input.GetAxis("Mouse Y") * baseSensitivity / 60;
         
         originalRot *= Quaternion.Euler (-xRot, 0f, 0f);
 		originalRot = ClampRotationAroundXAxis (originalRot);
 
-		//Quaternion yQuat = Quaternion.AngleAxis (rot.x, Vector3.left);
-		//myCam.transform.localRotation = originalRot * yQuat;
-
 		myCam.transform.localRotation = originalRot;
-
-		//myCam.transform.eulerAngles = new Vector3 (rot.x, myCam.transform.eulerAngles.y, myCam.transform.eulerAngles.z);
-
-
-		//RaycastHit hitInfo;
-		//Ray ray = myCam.GetComponent<Camera>().ScreenPointToRay(new Vector3(Screen.width/2, Screen.height/2));
-		//if(Physics.Raycast(ray, out hitInfo, 100))
-		//{
-		//	aimBall.transform.position = hitInfo.point;
-		//}
-
-
 	}
 
-
+    //Stop the player from looking too far up or down.
     Transform ClampUpLook(Transform t)
     {
         Vector3 newV3 = t.transform.eulerAngles;
@@ -101,10 +84,9 @@ public class CameraLook : Photon.MonoBehaviour
 		return q;
 	}
 
-	// Update is called once per frame
 	void Update ()
 	{
-		#region maxStuff
+        //Stop looking if god or if in a menu
 		if (GetComponent<GodSetup>().isGod)
 		{
 			return;
@@ -112,7 +94,6 @@ public class CameraLook : Photon.MonoBehaviour
 		{
 			return;
 		}
-		#endregion
 
 		if (photonView.isMine && PhotonNetwork.connected)
 		{
@@ -128,15 +109,6 @@ public class CameraLook : Photon.MonoBehaviour
             }
 
             GetSensitivity();
-
-			/*if (Input.GetKeyDown(KeyCode.Escape))
-			{
-				//Cursor.visible = true;
-			}*/
-		}
-
-		if (!photonView.isMine) {
-			// have the legs move if rotated more than a certain amount
 		}
 	}
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 public class Stun : MonoBehaviour {
-
+    //Variables
     public float distToHit;
     public float timeToExplode;
     public float stunDuration;
@@ -19,22 +19,22 @@ public class Stun : MonoBehaviour {
     float startSensY;
 
     bool hasExploded;
-	// Use this for initialization
-	void Start () {
+
+    void Start ()
+    {
+        //Store references to stuff.
         explodeTimer = timeToExplode;
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 
         startSpeed = 4;
-        //startSensX = players[0].GetComponent<CameraLook>().baseSensitivity;
-        //startSensY = players[0].GetComponent<CameraLook>().baseSensitivity * 90;
         stunTimer = stunDuration;
 
         UI = GameObject.Find("StunnedUI").GetComponent<Text>();
         GetComponentInChildren<ParticleSystem>().enableEmission = false;
-       }
+    }
 
-    // Update is called once per frame
-    void Update () {
+    void Update ()
+    {
         if (hasExploded)
         {
             stunTimer -= Time.deltaTime;
@@ -69,7 +69,7 @@ public class Stun : MonoBehaviour {
             OnStunExplode();
         }
 	}
-
+    //Find if the player should be stunned when the explosion goes off.
     void OnStunExplode()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");

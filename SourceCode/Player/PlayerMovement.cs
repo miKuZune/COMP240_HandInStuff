@@ -6,17 +6,12 @@ using RootMotion.FinalIK;
 
 public class PlayerMovement : Photon.MonoBehaviour
 {
-
+    //Variables
     public float speed;
     public float ySpeed;
     public float jump;
-    //public float gravity;
 
     float startSpeed;
-
-    //public float topSpeed;
-
-    //public float drag;
 
     Vector3 moveDir = Vector3.zero;
     public float verticalVel = 0;
@@ -28,8 +23,6 @@ public class PlayerMovement : Photon.MonoBehaviour
 
 	public Vector2 speedTriggerThings;
 
-	//AimIK aim;
-	//LookAtIK look;
 
 	public AudioSource footstepsSFX;
 	public AudioClip leftFoot;
@@ -66,7 +59,6 @@ public class PlayerMovement : Photon.MonoBehaviour
         isStunned = false;
     }
 
-    // Use this for initialization
     void Start ()
     {
         charController = GetComponent<CharacterController>();
@@ -74,18 +66,14 @@ public class PlayerMovement : Photon.MonoBehaviour
 
 		inPauseMenu = false;
 
-		//aim = GetComponent<AimIK> ();
-		//look = GetComponent<LookAtIK> ();
-		//aim.enabled = true;
-		//look.enabled = true;
         isStunned = false;
 
         timeStunned = 0;
 
 		bouncePadStoredTime = bouncePadTimer;
 
-		if (photonView.isMine) {
-			//fpsAnimations = Camera.main.GetComponentInChildren<Animator> ();
+		if (photonView.isMine)
+        {
 			fpsAnimations = GameObject.Find("WaterPistol_Idle").GetComponent<Animator>();
 		}
 
@@ -111,13 +99,11 @@ public class PlayerMovement : Photon.MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-		#region maxStuff
 		if (GetComponent<GodSetup>().isGod)
 		{
 			return;
 		}
-		#endregion
-
+        //Handle third person animations for other players.
         if(photonView.isMine == false && PhotonNetwork.connected == true)
         {
 			anim.SetFloat("InputV", speedTriggerThings.y);
@@ -139,7 +125,7 @@ public class PlayerMovement : Photon.MonoBehaviour
 		moveDir = new Vector3 (Input.GetAxis ("Horizontal") * speed, 0, Input.GetAxis ("Vertical") * speed);
 		
         moveDir = transform.TransformDirection(moveDir);
-
+        //Handle jump pad physics
 		if (bouncePadTimer > 0f) {
 			canBeActedUponByBouncePad = false;
 			bouncePadTimer -= Time.deltaTime;
@@ -147,13 +133,9 @@ public class PlayerMovement : Photon.MonoBehaviour
 		if (bouncePadTimer <= 0f) {
 			canBeActedUponByBouncePad = true;
 		}
-
-
-        //moveDir *= speed;
-
+        //Handle first person animations
 		fpsAnimations.SetFloat("speed", moveDir.magnitude);
 
-        //anim.SetFloat("Speed", moveDir.magnitude * speed);
 		anim.SetFloat("InputH", Input.GetAxis("Vertical") * 10);
 		anim.SetFloat ("InputV", Input.GetAxis ("Horizontal") * 10);
 
@@ -171,8 +153,6 @@ public class PlayerMovement : Photon.MonoBehaviour
             if(Mathf.Abs(verticalVel) > jump * 0.78f)
             {
                 anim.SetBool("Jumping", true);
-				//anim.SetTrigger("Jump");
-
             }
             verticalVel += Physics.gravity.y * Time.deltaTime * ySpeed;
         }
@@ -201,13 +181,12 @@ public class PlayerMovement : Photon.MonoBehaviour
 
     void FixedUpdate()
     {
-		#region maxStuff
 		if (GetComponent<GodSetup>().isGod)
 		{
 			return;
 		}
         CheckForUnStun();
-		#endregion
+
         if (photonView.isMine && !Rounds.roundPaused && !isStunned)
         {
 			charController.Move(moveDir.normalized * speed * Time.deltaTime);

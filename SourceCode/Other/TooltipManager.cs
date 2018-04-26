@@ -3,27 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 public class TooltipManager : MonoBehaviour {
-
-
+    //Variables
 	public GameObject cooldowns;
 	public GameObject tooltipText;
 	public GameObject skipButton;
 	public string[] tips;
 	public Vector2[] tooltipPos;
 	int currentTip;
-	// Use this for initialization
-	void Start () {
+
+    void Start () {
 		currentTip = -1;
 		Next ();
 		if (cooldowns != null) {cooldowns.SetActive (true);}
 	}
-
+    
 	public void TurnOffTooltips()
 	{
 		this.gameObject.SetActive (false);
 		if (skipButton != null) {skipButton.SetActive (false);}
 	}
-
+    //
 	public void ShowAndSetTooltip(string tip)
 	{
 		tooltipText.SetActive(true);
@@ -36,7 +35,7 @@ public class TooltipManager : MonoBehaviour {
 		if (skipButton != null) {skipButton.SetActive (false);}
 
 	}
-
+    //Show next tip.
 	public void Next()
 	{
 		currentTip++;

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Respawn : Photon.MonoBehaviour {
-
+    //Variables
 	PlayerShoot shoot;
 	GameManager gameManager;
 	PlayerMovement movement;
@@ -30,7 +30,7 @@ public class Respawn : Photon.MonoBehaviour {
     public GameObject playerMesh;
 
 	void Start(){
-
+        //Start the player off at their teams spawn point.
 		if (photonView.isMine)
 		{
 			if (photonView.owner.GetTeam () == PunTeams.Team.blue) {
@@ -43,7 +43,7 @@ public class Respawn : Photon.MonoBehaviour {
 
             playerMesh = GameObject.Find("WaterPistol_Idle");
 		}
-
+        //Get references to objects in the scene.
 		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
 
 		if (photonView.isMine) {
@@ -103,22 +103,8 @@ public class Respawn : Photon.MonoBehaviour {
 		GameObject[] allPlayers;
 		allPlayers = GameObject.FindGameObjectsWithTag ("Player");
 
-		//Count how many players are in the game and aren't the havoc players.
-		//int notGodPlayerCount = 0;
-		//for (int i = 0; i < allPlayers.Length; i++) 
-		//{
-         //   if(allPlayers[i] != null)
-         //   {
-         //       if (!allPlayers[i].GetComponent<GodSetup>().isGod)
-         //       {
-        //            notGodPlayerCount++;
-          //      }
-         //   }
-			
-		//}
 		//Collect all the non god players 
 		GameObject[] noGodPlayers;
-        //noGodPlayers = new GameObject[notGodPlayerCount];
         noGodPlayers = new GameObject[allPlayers.Length];
         int notGodIndex = 0;
 		for (int i = 0; i < allPlayers.Length; i++)
@@ -130,7 +116,7 @@ public class Respawn : Photon.MonoBehaviour {
 			}
 		}
 
-		//Sort out players who are on the same team
+		//Sort into players who are not on the players team
 
 		GameObject[] notMyTeamPlayers;
 		int otherTeamCount = 0;
@@ -154,7 +140,7 @@ public class Respawn : Photon.MonoBehaviour {
 			
 		return notMyTeamPlayers;
 	}
-
+    //Chooses a respawn point based on which point is furthest away from all enemies.
 	int chooseRespawnPoint()
 	{
 		int respawnPointID = 0;
@@ -189,7 +175,6 @@ public class Respawn : Photon.MonoBehaviour {
 
 		if (photonView.isMine) {
 
-			/// fix?
 			respawnTxt.text = "";
 			shoot.reloadWarningPanel.SetActive (false);
 			int respawnPointID = chooseRespawnPoint();
@@ -226,8 +211,10 @@ public class Respawn : Photon.MonoBehaviour {
 
     }
 
-	void Update(){
-		if (dead) {
+	void Update()
+    {
+		if (dead)
+        {
 			respawnTime -= Time.deltaTime;
 
 			if (photonView.isMine) {
@@ -238,7 +225,6 @@ public class Respawn : Photon.MonoBehaviour {
 				respawnTime = storedRespawnTime;
 				Respawned ();
 				dead = false;
-				//respawnTxt.text = "";
 			}
 		}
 	}

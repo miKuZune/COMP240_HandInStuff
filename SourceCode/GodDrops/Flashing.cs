@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Flashing : MonoBehaviour {
-
+    //Turns a light on and off periodically.
     public float flashTimer;
 
     float timer;
-    // Update is called once per frame
+    
     void Update () {
         timer += Time.deltaTime;
 

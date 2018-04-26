@@ -5,9 +5,10 @@ using UnityEngine;
 public class OceanMax : MonoBehaviour {
 
 	public float moveAmount;
-	
-	// Update is called once per frame
-	void Update () {
+
+    //Move an object up and down
+    void Update ()
+    {
 		transform.Translate (0, moveAmount * Time.deltaTime, 0);
 		moveAmount *= -1;
 	}
